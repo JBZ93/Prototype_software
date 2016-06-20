@@ -23,7 +23,7 @@ void init_ramp() {
 void end_ramp() {rp_GenOutDisable(RP_CH_2);}
 
 void init_acq() {
-	rp_AcqSetDecimation(RP_DEC_8);
+	rp_AcqSetDecimation(RP_DEC_1);
 	rp_AcqSetAveraging(1);
 	rp_AcqSetGain(RP_CH_2,RP_HIGH); 	
 }
@@ -48,7 +48,7 @@ void end() {
 void trigg() {
 	rp_AcqStart();
 	rp_AcqSetTriggerSrc(RP_TRIG_SRC_EXT_NE);
-	rp_AcqSetTriggerDelay(-6144);//144); //if there is noise at the end can use -6550
+	rp_AcqSetTriggerDelay(8192);
 	rp_acq_trig_state_t state = RP_TRIG_STATE_TRIGGERED;
 	while(1){
 		rp_AcqGetTriggerState(&state);
@@ -97,8 +97,8 @@ void signal_callback_handler(){
 
 int main(int argc, char **argv){
 	int line, image;//, i;
-	int Nline = 64, Nimage=1000;
-	uint32_t buff_size = 1024;
+	int Nline = 64, Nimage=1;
+	uint32_t buff_size = 16384;
 	uint32_t tcp_size = buff_size+1;
 	float *buff = (float *)malloc(buff_size * sizeof(float));
 	char *tcp_buff = (char *)malloc(tcp_size * sizeof(char));
@@ -121,7 +121,7 @@ int main(int argc, char **argv){
 		printf("Image numéro %i\n",image);
 	}
 
-	//writefile(buff,buff_size);
+	writefile(buff,buff_size);
 	printf("Done\n");  //min time 2.3 ms between each acquisition with 4096 points
 	end();             //min with 1.2 ms with 2048 points
 	free(buff);

@@ -48,7 +48,7 @@ void end() {
 void trigg() {
 	rp_AcqStart();
 	rp_AcqSetTriggerSrc(RP_TRIG_SRC_EXT_NE);
-	rp_AcqSetTriggerDelay(-6144);//144); //if there is noise at the end can use -6550
+	rp_AcqSetTriggerDelay(-6144); //if there is noise at the end can use -6550
 	rp_acq_trig_state_t state = RP_TRIG_STATE_TRIGGERED;
 	while(1){
 		rp_AcqGetTriggerState(&state);
@@ -76,7 +76,10 @@ void sendviatcp (char *tcpline, uint32_t buffer_size, float *buffer, int line_nu
 	float tmp, scale=1.5; //pend on maximum value of input, for test scale=1
 	tcpline[0]=line_number;
 	for (i=0 ; i<buffer_size ; i++) {
-		tmp=255.0/scale*buffer[i];
+		tmp=255.0/scale*buffer[i]-25;
+		tmp=(int)tmp;
+		if (tmp<0) {tmp=-tmp;}
+		if (tmp==0) {tmp=1;}
 		if (tmp>255) {tmp=255;}
 		tcpline[i+1]=(char)tmp;
 	}
