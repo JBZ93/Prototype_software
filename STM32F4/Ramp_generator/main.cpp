@@ -181,6 +181,9 @@ void test6(){
     printf("****************************************************** \n");
     wait(1);
     init_gpioDAC();
+	//change the "pente" value to play with the duration 
+    //increase "pente" -> decrease the duration
+    //decrease "pente" -> increase the duration
     float pente = 0.495f, pas= 0.1f; // Value validate with the measure in the scope (no linearity)
     bool sens=1; //0: decreasing ; 1 : increasing
     while(1) {
